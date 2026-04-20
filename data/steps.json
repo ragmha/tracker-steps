@@ -1,4 +1,6 @@
 {
   "goal": 20000,
-  "entries": []
+  "entries": [
+    { "date": "2026-04-20", "completed": false }
+  ]
 }
