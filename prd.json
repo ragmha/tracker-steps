@@ -33,8 +33,8 @@
         "bun run build passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Repo created, scaffolded, all quality gates pass."
     },
     {
       "id": "US-003",
@@ -51,8 +51,8 @@
         "bun run typecheck passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Data layer committed. 5 functions, 3 interfaces, 24 passing tests."
     },
     {
       "id": "US-004",
@@ -71,8 +71,8 @@
         "bun run typecheck passes"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": "Design reference: dark bg #0a0a0a, card surfaces #1a1a1a, green/yellow gradient accents, bold numbers + small units, status badges"
+      "passes": true,
+      "notes": "4 components with dark theme, gradient progress bars, 13 component tests passing."
     },
     {
       "id": "US-005",
@@ -90,8 +90,8 @@
         "bun run build passes (static export generates out/ directory)"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Main page assembled. All 4 quality gates pass. Responsive dark-theme dashboard."
     },
     {
       "id": "US-006",
@@ -109,8 +109,8 @@
         "bun run build passes"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Deploy workflow created and committed. Uses Bun + actions/deploy-pages@v4."
     },
     {
       "id": "US-007",
@@ -124,8 +124,8 @@
         "README.md includes project description, usage instructions, and privacy statement"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Pushed to main, README added, PR #1 opened at https://github.com/ragmha/tracker-steps/pull/1"
     }
   ]
 }

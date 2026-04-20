@@ -6,6 +6,11 @@ Project: tracker-steps
 ## Codebase Patterns
 - APM skills are in .github/skills/ — auto-discovered by agents
 - apm_modules/ is gitignored (added by apm install)
+- Data layer uses fs.readFileSync — runs at build time only (server component)
+- Components take props interfaces, no direct data imports — keeps them testable
+- shadcn/ui Card with `bg-[#1a1a1a] border-[#2a2a2a]` for dark theme cards
+- Vitest + @testing-library/react for all tests, setup in src/test-setup.ts
+- unset GITHUB_TOKEN before gh CLI commands (env var overrides keyring auth)
 ---
 
 ## 2026-04-20T06:52 - US-001
