@@ -1,8 +1,10 @@
-import {
-  getStepsData,
-  getWeeklyEntries,
-} from "@/lib/steps";
+"use client";
+
 import { Dashboard } from "@/components/dashboard";
+import type { StepsData } from "@/types";
+import rawStepsData from "../../data/steps.json";
+
+const stepsData = rawStepsData as StepsData;
 
 const DAY_LABELS = [
   "Sunday",
@@ -14,6 +16,26 @@ const DAY_LABELS = [
   "Saturday",
 ];
 
+function getWeeklyEntries() {
+  const today = new Date();
+  const entryMap = new Map(
+    stepsData.entries.map((e) => [e.date, e]),
+  );
+  const result = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const dateStr = `${y}-${m}-${day}`;
+    result.push(
+      entryMap.get(dateStr) ?? { date: dateStr, completed: false },
+    );
+  }
+  return result;
+}
+
 function formatTodayDate(): string {
   return new Date().toLocaleDateString("en-US", {
     month: "long",
@@ -23,8 +45,7 @@ function formatTodayDate(): string {
 }
 
 export default function Home() {
-  const data = getStepsData();
-  const weeklyEntries = getWeeklyEntries(data);
+  const weeklyEntries = getWeeklyEntries();
 
   const entries = weeklyEntries.map((entry) => ({
     date: entry.date,
@@ -34,7 +55,6 @@ export default function Home() {
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-col items-center px-4 py-10">
-      {/* Header */}
       <header className="mb-8 text-center">
         <h1 className="text-lg font-semibold tracking-wide text-[#666666]">
           Steps Tracker
@@ -42,7 +62,7 @@ export default function Home() {
         <p className="mt-1 text-sm text-[#444444]">{formatTodayDate()}</p>
       </header>
 
-      <Dashboard initialEntries={entries} goal={data.goal} />
+      <Dashboard initialEntries={entries} goal={stepsData.goal} />
     </main>
   );
 }
