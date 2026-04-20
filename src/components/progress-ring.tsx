@@ -64,9 +64,8 @@ export function ProgressRing({ completed, goal, percentage }: ProgressRingProps)
           strokeDashoffset={offset}
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
           filter="url(#glow)"
-          className="animate-ring-fill"
           style={{
-            animation: "ring-fill 1s ease-out forwards",
+            transition: "stroke-dashoffset 0.6s ease-out",
           }}
         />
 
