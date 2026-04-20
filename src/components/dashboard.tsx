@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { ProgressRing } from "@/components/progress-ring";
 import { WeeklyView } from "@/components/weekly-view";
 import { StreakCounter } from "@/components/streak-counter";
@@ -39,6 +39,11 @@ function computeStreak(
   return streak;
 }
 
+function getLocalToday(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
 export function Dashboard({ initialEntries, goal }: DashboardProps) {
   const [entries, setEntries] = useState(() => {
     if (typeof window === "undefined") return initialEntries;
@@ -51,7 +56,7 @@ export function Dashboard({ initialEntries, goal }: DashboardProps) {
     }));
   });
 
-  const toggleDay = (date: string) => {
+  const toggleDay = useCallback((date: string) => {
     setEntries((prev) => {
       const updated = prev.map((e) =>
         e.date === date ? { ...e, completed: !e.completed } : e,
@@ -63,25 +68,37 @@ export function Dashboard({ initialEntries, goal }: DashboardProps) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
       return updated;
     });
-  };
+  }, []);
 
-  const now = new Date();
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-  const todayEntry = entries.find((e) => e.date === today);
+  // Find today's entry — use the LAST entry in the array (most recent day)
+  // as a fallback if exact date match fails (build-time vs runtime date mismatch)
+  const today = getLocalToday();
+  const todayEntry = entries.find((e) => e.date === today) ?? entries[entries.length - 1];
+  const todayDate = todayEntry?.date ?? today;
   const todayCompleted = todayEntry?.completed ?? false;
   const percentage = todayCompleted ? 100 : 0;
   const completedCount = entries.filter((e) => e.completed).length;
   const streak = computeStreak(entries);
 
+  const toggleToday = useCallback(() => {
+    toggleDay(todayDate);
+  }, [toggleDay, todayDate]);
+
   return (
     <>
-      {/* Progress Ring */}
+      {/* Progress Ring — clickable to toggle today */}
       <div className="mb-8">
-        <ProgressRing
-          completed={todayCompleted}
-          goal={goal}
-          percentage={percentage}
-        />
+        <button
+          onClick={toggleToday}
+          className="cursor-pointer rounded-full transition-transform active:scale-95"
+          aria-label={todayCompleted ? "Mark today as incomplete" : "Mark today as complete"}
+        >
+          <ProgressRing
+            completed={todayCompleted}
+            goal={goal}
+            percentage={percentage}
+          />
+        </button>
       </div>
 
       {/* Stats Row */}
