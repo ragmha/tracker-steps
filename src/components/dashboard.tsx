@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ProgressRing } from "@/components/progress-ring";
 import { WeeklyView } from "@/components/weekly-view";
 import { StreakCounter } from "@/components/streak-counter";
@@ -45,16 +45,21 @@ function getLocalToday(): string {
 }
 
 export function Dashboard({ initialEntries, goal }: DashboardProps) {
-  const [entries, setEntries] = useState(() => {
-    if (typeof window === "undefined") return initialEntries;
+  const [entries, setEntries] = useState(initialEntries);
+
+  // Load saved state from localStorage AFTER hydration to avoid mismatch
+  useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return initialEntries;
-    const savedEntries: Record<string, boolean> = JSON.parse(saved);
-    return initialEntries.map((e) => ({
-      ...e,
-      completed: savedEntries[e.date] ?? e.completed,
-    }));
-  });
+    if (saved) {
+      const savedEntries: Record<string, boolean> = JSON.parse(saved);
+      setEntries((prev) =>
+        prev.map((e) => ({
+          ...e,
+          completed: savedEntries[e.date] ?? e.completed,
+        })),
+      );
+    }
+  }, []);
 
   const toggleDay = useCallback((date: string) => {
     setEntries((prev) => {
