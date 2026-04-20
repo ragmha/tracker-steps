@@ -1,11 +1,35 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ProgressRing } from "../progress-ring";
 import { WeeklyView } from "../weekly-view";
 import { StreakCounter } from "../streak-counter";
 import { GoalCard } from "../goal-card";
+import { Dashboard } from "../dashboard";
+
+const mockLocalStorage = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] ?? null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+  };
+})();
+
+Object.defineProperty(window, "localStorage", { value: mockLocalStorage });
 
 describe("ProgressRing", () => {
+  beforeEach(() => {
+    mockLocalStorage.clear();
+  });
+
   it('shows "Complete" when completed is true', () => {
     render(<ProgressRing completed={true} goal={20000} percentage={100} />);
     expect(screen.getByText("Complete")).toBeInTheDocument();
@@ -125,5 +149,93 @@ describe("GoalCard", () => {
     render(<GoalCard goal={20000} />);
     const matches = screen.getAllByText("daily goal");
     expect(matches.length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe("Dashboard", () => {
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+
+  const entries = [
+    { date: yesterday, completed: true, dayLabel: "Monday" },
+    { date: today, completed: false, dayLabel: "Tuesday" },
+  ];
+
+  beforeEach(() => {
+    mockLocalStorage.clear();
+  });
+
+  it("renders progress ring, stats, and weekly view", () => {
+    render(<Dashboard initialEntries={entries} goal={20000} />);
+    expect(screen.getByText("Not yet")).toBeInTheDocument();
+    expect(screen.getByText("GOAL: 20,000")).toBeInTheDocument();
+    expect(screen.getByText("Monday")).toBeInTheDocument();
+    expect(screen.getByText("Tuesday")).toBeInTheDocument();
+  });
+
+  it("toggles a pending day to done on click", async () => {
+    const user = userEvent.setup();
+    render(<Dashboard initialEntries={entries} goal={20000} />);
+
+    const tuesdayCheckbox = screen.getByRole("checkbox", {
+      name: /Tuesday not completed/,
+    });
+    await user.click(tuesdayCheckbox);
+
+    expect(tuesdayCheckbox).toHaveAttribute("aria-checked", "true");
+    expect(mockLocalStorage.setItem).toHaveBeenCalled();
+  });
+
+  it("toggles a completed day to pending on click", async () => {
+    const user = userEvent.setup();
+    render(<Dashboard initialEntries={entries} goal={20000} />);
+
+    const mondayCheckbox = screen.getByRole("checkbox", {
+      name: /Monday completed/,
+    });
+    await user.click(mondayCheckbox);
+
+    expect(mondayCheckbox).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("updates progress ring when today is toggled", async () => {
+    const user = userEvent.setup();
+    render(<Dashboard initialEntries={entries} goal={20000} />);
+
+    expect(screen.getByText("Not yet")).toBeInTheDocument();
+
+    const todayCheckbox = screen.getByRole("checkbox", {
+      name: /Tuesday not completed/,
+    });
+    await user.click(todayCheckbox);
+
+    expect(screen.getByText("Complete")).toBeInTheDocument();
+  });
+
+  it("loads saved state from localStorage on mount", () => {
+    const saved: Record<string, boolean> = {};
+    saved[today] = true;
+    saved[yesterday] = false;
+    mockLocalStorage.getItem.mockReturnValueOnce(JSON.stringify(saved));
+
+    render(<Dashboard initialEntries={entries} goal={20000} />);
+
+    expect(screen.getByText("Complete")).toBeInTheDocument();
+  });
+
+  it("updates completion count when toggling", async () => {
+    const user = userEvent.setup();
+    render(<Dashboard initialEntries={entries} goal={20000} />);
+
+    const initialCounts = screen.getAllByText("1/2");
+    expect(initialCounts.length).toBeGreaterThanOrEqual(1);
+
+    const todayCheckbox = screen.getByRole("checkbox", {
+      name: /Tuesday not completed/,
+    });
+    await user.click(todayCheckbox);
+
+    const updatedCounts = screen.getAllByText("2/2");
+    expect(updatedCounts.length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -2,6 +2,7 @@ export interface WeeklyViewProps {
   entries: Array<{ date: string; completed: boolean; dayLabel: string }>;
   completedCount: number;
   totalDays: number;
+  onToggle?: (date: string) => void;
 }
 
 function formatShortDate(dateStr: string): string {
@@ -13,6 +14,7 @@ export function WeeklyView({
   entries,
   completedCount,
   totalDays,
+  onToggle,
 }: WeeklyViewProps) {
   return (
     <div className="rounded-2xl bg-[#111111] px-4 py-5">
@@ -32,20 +34,22 @@ export function WeeklyView({
             }`}
           >
             {/* Checkbox */}
-            <div
-              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+            <button
+              type="button"
+              className={`flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full transition-all duration-150 active:scale-90 ${
                 entry.completed
-                  ? "bg-[#00d4ff]"
-                  : "border-2 border-[#333333] bg-transparent"
+                  ? "bg-[#00d4ff] hover:bg-[#33ddff]"
+                  : "border-2 border-[#333333] bg-transparent hover:border-[#555555]"
               }`}
               role="checkbox"
               aria-checked={entry.completed}
               aria-label={`${entry.dayLabel} ${entry.completed ? "completed" : "not completed"}`}
+              onClick={() => onToggle?.(entry.date)}
             >
               {entry.completed && (
                 <span className="text-sm font-bold text-black">✓</span>
               )}
-            </div>
+            </button>
 
             {/* Day info */}
             <div className="flex flex-1 flex-col">
