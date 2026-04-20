@@ -1,0 +1,11 @@
+# apm.yml — agent skills manifest for tracker-steps
+name: tracker-steps
+version: 1.0.0
+dependencies:
+  apm:
+    - github/awesome-copilot/skills/premium-frontend-ui
+    - github/awesome-copilot/skills/publish-to-pages
+    - github/awesome-copilot/skills/conventional-commit
+    - github/awesome-copilot/skills/gh-cli
+    - github/awesome-copilot/skills/create-readme
+    - github/awesome-copilot/skills/web-design-reviewer

@@ -1,0 +1,58 @@
+lockfile_version: '1'
+generated_at: '2026-04-20T03:55:45.200167+00:00'
+apm_version: 0.8.11
+dependencies:
+- repo_url: github/awesome-copilot
+  host: github.com
+  resolved_commit: 4c862de882d75533e8d44a83f96276bdf5781cf8
+  virtual_path: skills/conventional-commit
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .github/skills/conventional-commit
+  content_hash: sha256:f29c9486cede6c7b2df0cfb0a2e4aa67446552b991bcf17d1b309e903171f03d
+- repo_url: github/awesome-copilot
+  host: github.com
+  resolved_commit: 4c862de882d75533e8d44a83f96276bdf5781cf8
+  virtual_path: skills/create-readme
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .github/skills/create-readme
+  content_hash: sha256:d0ece1b2164ce1376e4ab6e98d6ac079df3a2a94f5f02224362b6a1ce2516ae9
+- repo_url: github/awesome-copilot
+  host: github.com
+  resolved_commit: 4c862de882d75533e8d44a83f96276bdf5781cf8
+  virtual_path: skills/gh-cli
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .github/skills/gh-cli
+  content_hash: sha256:cbe644b0c6760ae2a1eaafa39133920d889331327065d92a131675a665273e56
+- repo_url: github/awesome-copilot
+  host: github.com
+  resolved_commit: 4c862de882d75533e8d44a83f96276bdf5781cf8
+  virtual_path: skills/premium-frontend-ui
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .github/skills/premium-frontend-ui
+  content_hash: sha256:e7f3d02a0233beafdd6fe5335427388109b9699ebcdc6a8782a8bada2826d916
+- repo_url: github/awesome-copilot
+  host: github.com
+  resolved_commit: 4c862de882d75533e8d44a83f96276bdf5781cf8
+  virtual_path: skills/publish-to-pages
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .github/skills/publish-to-pages
+  content_hash: sha256:455e16677960733d3a86fdf3002ccbe1c202bb7fbffe7847527a06c8267db95a
+- repo_url: github/awesome-copilot
+  host: github.com
+  resolved_commit: 4c862de882d75533e8d44a83f96276bdf5781cf8
+  virtual_path: skills/web-design-reviewer
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .github/skills/web-design-reviewer
+  content_hash: sha256:07675a236738d8644ac57f0262726b1d59ad27e8cff0fdd1d7e1ffc884203cc1

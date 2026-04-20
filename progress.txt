@@ -1,0 +1,17 @@
+# Ralph Progress Log
+Started: 2026-04-20T06:50:00Z
+Project: tracker-steps
+---
+
+## Codebase Patterns
+- APM skills are in .github/skills/ — auto-discovered by agents
+- apm_modules/ is gitignored (added by apm install)
+---
+
+## 2026-04-20T06:52 - US-001
+- APM was already installed at /opt/homebrew/bin/apm (v0.8.11)
+- Created apm.yml with 6 awesome-copilot skills
+- All skills cached, installed to .github/skills/
+- Files created: apm.yml, .github/skills/*, apm-lock.json
+- **Learnings:** APM auto-adds apm_modules/ to .gitignore
+---

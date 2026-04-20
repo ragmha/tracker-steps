@@ -1,0 +1,131 @@
+{
+  "project": "tracker-steps",
+  "branchName": "main",
+  "description": "Steps Tracker MVP — A beautiful dark-theme GitHub Pages site for tracking daily 20,000-step goal via checkmarks. Built with Bun, Next.js, shadcn/ui, Vitest.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Install APM and agent skills",
+      "description": "As a developer, I need APM installed with the relevant awesome-copilot skills so the agent has reference knowledge during development.",
+      "acceptanceCriteria": [
+        "APM is installed (curl -sSL https://aka.ms/apm-unix | sh)",
+        "apm.yml is created with 6 skills: premium-frontend-ui, publish-to-pages, conventional-commit, gh-cli, create-readme, web-design-reviewer",
+        "apm install runs successfully"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "APM was already installed at /opt/homebrew/bin/apm. All 6 skills installed and integrated to .github/skills/"
+    },
+    {
+      "id": "US-002",
+      "title": "Create repo and scaffold Next.js project",
+      "description": "As a developer, I need a public GitHub repo with Next.js + Bun + TypeScript + Tailwind + shadcn/ui + Vitest configured for static export.",
+      "acceptanceCriteria": [
+        "Public repo ragmha/tracker-steps created on GitHub",
+        "Next.js project initialized with Bun, TypeScript, Tailwind CSS, ESLint",
+        "next.config.ts configured for static export (output: 'export')",
+        "shadcn/ui initialized with dark theme default",
+        "Vitest + @testing-library/react + jsdom installed and configured",
+        "package.json has scripts: lint, typecheck (tsc --noEmit), test (vitest run), build",
+        "data/steps.json created with goal: 20000 and empty entries array",
+        "bun run lint passes",
+        "bun run typecheck passes",
+        "bun run build passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Build data layer with types and utility functions",
+      "description": "As a developer, I need typed data utilities that read steps.json at build time and compute today's status, weekly entries, streak, and completion.",
+      "acceptanceCriteria": [
+        "src/types/index.ts has StepEntry, StepsData, WeeklyCompletion interfaces",
+        "src/lib/steps.ts exports: getStepsData(), getTodayStatus(), getWeeklyEntries(), getStreak(), getWeeklyCompletion()",
+        "getStepsData() reads data/steps.json at build time via fs.readFileSync",
+        "getStreak() counts consecutive completed days from most recent",
+        "getWeeklyCompletion() returns {completed, total, percentage}",
+        "src/lib/__tests__/steps.test.ts has comprehensive unit tests for all functions",
+        "bun run test passes",
+        "bun run typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Build dashboard UI components",
+      "description": "As a user, I want a beautiful dark-theme dashboard with TodayCard, WeeklyView, StreakCounter, and GoalCard using shadcn/ui.",
+      "acceptanceCriteria": [
+        "shadcn/ui Card, Badge, Progress, Separator components are installed",
+        "TodayCard shows bold step count '0 / 20,000' with Progress bar and status Badge",
+        "WeeklyView shows 7-day grid (Mon-Sun) with checkmarks and mini vertical bars",
+        "StreakCounter shows fire emoji + streak count in a Card",
+        "GoalCard shows target emoji + '20,000 steps' goal display",
+        "All components use dark theme styling inspired by Dribbble reference",
+        "Green-to-yellow gradient on progress bars",
+        "Component tests exist in src/components/__tests__/",
+        "bun run test passes",
+        "bun run typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": "Design reference: dark bg #0a0a0a, card surfaces #1a1a1a, green/yellow gradient accents, bold numbers + small units, status badges"
+    },
+    {
+      "id": "US-005",
+      "title": "Assemble main dashboard page",
+      "description": "As a user, I want a single responsive page combining all dashboard components with dark theme.",
+      "acceptanceCriteria": [
+        "src/app/page.tsx assembles TodayCard, WeeklyView, StreakCounter, GoalCard",
+        "src/app/layout.tsx sets dark theme, Inter font, proper metadata",
+        "src/app/globals.css has dark theme base styles",
+        "Page reads step data at build time via data utils",
+        "Responsive layout works on mobile and desktop",
+        "Header shows 'Steps Tracker' title and today's date",
+        "bun run lint passes",
+        "bun run typecheck passes",
+        "bun run build passes (static export generates out/ directory)"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Add GitHub Pages deployment workflow",
+      "description": "As a developer, I need a GitHub Actions workflow to auto-deploy the static site to GitHub Pages on push to main.",
+      "acceptanceCriteria": [
+        ".github/workflows/deploy.yml created",
+        "Triggers on push to main branch",
+        "Uses Bun for install and build",
+        "Deploys out/ directory to GitHub Pages",
+        "Workflow YAML is valid",
+        "bun run lint passes",
+        "bun run typecheck passes",
+        "bun run test passes",
+        "bun run build passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "Push to main and create PR for initial data entry",
+      "description": "As a user, I want a PR that adds my first step entry to establish the edit-JSON-via-PR workflow.",
+      "acceptanceCriteria": [
+        "All code pushed to main branch of ragmha/tracker-steps",
+        "Branch add-first-entry created from main",
+        "data/steps.json updated with first entry: { date: '2026-04-20', completed: false }",
+        "PR opened from add-first-entry to main",
+        "README.md includes project description, usage instructions, and privacy statement"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
