@@ -128,3 +128,12 @@
     @apply font-sans;
   }
 }
+
+@keyframes ring-fill {
+  from {
+    stroke-dashoffset: var(--ring-circumference);
+  }
+  to {
+    stroke-dashoffset: var(--ring-offset);
+  }
+}
